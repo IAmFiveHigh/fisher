@@ -3,6 +3,7 @@
 """
 
 from flask import Flask, make_response
+from help import is_isbn_or_key
 
 __author__ = 'IAmFiveHigh'
 
@@ -10,9 +11,16 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 
-@app.route('/hello')
-def hello():
-    return 'hello wugao'
+@app.route('/book/search/<q>/<page>')
+def search(q, page):
+    """
+        q :普通关键字 isbn
+        page: 页码
+
+    """
+    isbn_or_key = is_isbn_or_key(q)
+
+    return isbn_or_key
 
 
 @app.route('/helloo')
