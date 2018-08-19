@@ -10,4 +10,3 @@ class HTTP:
         else:
             return r.json() if return_json else r.text
 
-
