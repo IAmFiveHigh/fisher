@@ -2,8 +2,12 @@
  created by wugao on 2018/8/18
 """
 
-from flask import Flask, make_response
+from flask import Flask
+
+from YuShu import YuShu
 from help import is_isbn_or_key
+
+import json
 
 __author__ = 'IAmFiveHigh'
 
@@ -19,8 +23,12 @@ def search(q, page):
 
     """
     isbn_or_key = is_isbn_or_key(q)
+    if isbn_or_key == 'isbn':
+        result = YuShu.search_by_isbn(q)
+    else:
+        result = YuShu.search_by_keyword(q)
 
-    return isbn_or_key
+    return json.dump(result), 200, {'content-type': 'application/json'}
 
 
 @app.route('/helloo')
