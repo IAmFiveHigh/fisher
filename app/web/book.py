@@ -3,9 +3,10 @@
 """
 
 from flask import jsonify, request
-from YuShu import YuShu
-from help import is_isbn_or_key
+
 from app.forms.book import SearchForm
+from app.libs.help import is_isbn_or_key
+from app.spider.YuShu import YuShu
 from . import web
 
 __author__ = "IAmFiveHigh"

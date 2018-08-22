@@ -1,5 +1,7 @@
-from httper import HTTP
 from flask import current_app
+
+from app.libs.httper import HTTP
+
 
 class YuShu:
 
