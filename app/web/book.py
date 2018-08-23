@@ -44,4 +44,4 @@ def hello():
     }
     # response = make_response('<html>hello</html>', 301)
     # response.headers = headers
-    return '<html>hello</html>', 200
+    return '<html><h1>hello</h1><p>are you OK?</p></html>', 200
