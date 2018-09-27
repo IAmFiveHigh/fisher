@@ -8,8 +8,9 @@ from app.forms.book import SearchForm
 from app.libs.help import is_isbn_or_key
 from app.spider.YuShu import YuShu
 from . import web
-from app.viewModels.book import BookViewModel
+from app.viewModels.book import BookCollection
 
+import json
 __author__ = "IAmFiveHigh"
 
 
@@ -22,7 +23,7 @@ def search():
 
     """
     form = SearchForm(request.args)
-    json = {
+    result = {
         'code': 0,
         'message': '正确返回数据'
     }
@@ -30,21 +31,24 @@ def search():
         q = form.q.data.strip()
         page = form.page.data
 
+        books = BookCollection()
+        yushu = YuShu()
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == 'isbn':
-            result = YuShu.search_by_isbn(q)
-            result = BookViewModel.package_single(result, q)
-
+            yushu.search_by_isbn(q)
         else:
-            result = YuShu.search_by_keyword(q, page)
-            result = BookViewModel.package_collection(result, q)
-        json['data'] = result
+            yushu.search_by_keyword(q, page)
+        books.fill(yushu, q)
 
-        return jsonify(json)
+        # 先把对象转换成json字符串 再用loads方法转换成dict
+        data_string = json.dumps(books, default=lambda o: o.__dict__)
+        result['data'] = json.loads(data_string)
+
+        return jsonify(result)
     else:
-        json['code'] = 1
-        json['message'] = form.errors
-        return jsonify(json)
+        result['code'] = 1
+        result['message'] = form.errors
+        return jsonify(result)
 
 
 @web.route('/hello')
