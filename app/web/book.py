@@ -2,7 +2,7 @@
  created by wugao on 2018/8/19
 """
 
-from flask import jsonify, request
+from flask import jsonify, request, render_template, flash
 
 from app.forms.book import SearchForm
 from app.libs.help import is_isbn_or_key
@@ -60,3 +60,17 @@ def hello():
     # response = make_response('<html>hello</html>', 301)
     # response.headers = headers
     return '<html><h1>hello</h1><p>are you OK?</p></html>', 200
+
+
+@web.route('/test')
+def test():
+    r = {
+        'title': '我是title',
+        'body': '我是body',
+        'age': 18,
+        'name': ''
+    }
+
+    flash('hello wugao')
+    flash('wugao hello')
+    return render_template('test.html', data=r)
