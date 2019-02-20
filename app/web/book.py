@@ -59,7 +59,7 @@ def hello():
     }
     # response = make_response('<html>hello</html>', 301)
     # response.headers = headers
-    return '<html><h1>hello</h1><p>are you OK?</p></html>', 200
+    return '<html><h1>hello</h1><p>bug改完了吗？</p></html>', 200
 
 
 @web.route('/test')

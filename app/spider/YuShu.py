@@ -1,7 +1,7 @@
 from flask import current_app
 
 from app.libs.httper import HTTP
-from app.models.book import db, Book
+from app.models.book import Book
 
 import mysql.connector
 from app.secure import mysqlPassword
@@ -62,7 +62,7 @@ class YuShu:
         conn.close()
 
     @staticmethod
-    def search_book_by(isbn):
+    def search_book_by_mysql(isbn):
         conn = mysql.connector.connect(user='root', password=mysqlPassword, database='fisher')
         cursor = conn.cursor()
         cursor.execute('select * from book where isbn = %s', (isbn, ))

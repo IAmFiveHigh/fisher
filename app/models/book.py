@@ -3,14 +3,12 @@
  """
 
 from sqlalchemy import Column, Integer, String
-from flask_sqlalchemy import SQLAlchemy
+from app.models.base import Base
 
 __author__ = "IAmFiveHigh"
 
-db = SQLAlchemy()
 
-
-class Book(db.Model):
+class Book(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(50), nullable=False)
     author = Column(String(20), default='未名')

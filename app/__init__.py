@@ -2,7 +2,7 @@
   created by wugao on 2018-08-20
  """
 from flask import Flask
-from app.models.book import db
+from app.models.base import db
 
 __author__ = "IAmFiveHigh"
 
@@ -19,5 +19,5 @@ def create_app():
 
 
 def register_blueprint(app):
-    from app.web.book import web
+    from app.web import web
     app.register_blueprint(web)
