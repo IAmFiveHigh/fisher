@@ -55,6 +55,6 @@ def search():
 
 
 @web.route('/book/<isbn>/detail')
-def book_deatil(isbn):
+def book_detail(isbn):
     pass
 
