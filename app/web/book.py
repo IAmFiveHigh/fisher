@@ -23,15 +23,16 @@ def search():
 
     """
     form = SearchForm(request.args)
-    result = {
-        'code': 0,
-        'message': '正确返回数据'
-    }
+    # result = {
+    #     'code': 0,
+    #     'message': '正确返回数据'
+    # }
+    books = BookCollection()
     if form.validate():
         q = form.q.data.strip()
         page = form.page.data
 
-        books = BookCollection()
+
         yushu = YuShu()
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == 'isbn':
@@ -40,37 +41,20 @@ def search():
             yushu.search_by_keyword(q, page)
         books.fill(yushu, q)
 
-        # 先把对象转换成json字符串 再用loads方法转换成dict
-        data_string = json.dumps(books, default=lambda o: o.__dict__)
-        result['data'] = json.loads(data_string)
+        # # 先把对象转换成json字符串 再用loads方法转换成dict
+        # data_string = json.dumps(books, default=lambda o: o.__dict__)
+        # result['data'] = json.loads(data_string)
 
-        return jsonify(result)
+        # return jsonify(result)
     else:
-        result['code'] = 1
-        result['message'] = form.errors
-        return jsonify(result)
+        # result['code'] = 1
+        # result['message'] = form.errors
+        # return jsonify(result)
+        flash('搜索关键词不符合要求，请重新输入关键词')
+    return render_template('search_result.html', books=books)
 
 
-@web.route('/hello')
-def hello():
-    headers = {
-        'content-type': 'text/html',
-        # 'location': 'http://www.baidu.com'
-    }
-    # response = make_response('<html>hello</html>', 301)
-    # response.headers = headers
-    return '<html><h1>hello</h1><p>bug改完了吗？</p></html>', 200
+@web.route('/book/<isbn>/detail')
+def book_deatil(isbn):
+    pass
 
-
-@web.route('/test')
-def test():
-    r = {
-        'title': '我是title',
-        'body': '我是body',
-        'age': 18,
-        'name': ''
-    }
-
-    flash('hello wugao')
-    flash('wugao hello')
-    return render_template('test.html', data=r)
