@@ -8,7 +8,7 @@ from app.forms.book import SearchForm
 from app.libs.help import is_isbn_or_key
 from app.spider.YuShu import YuShu
 from . import web
-from app.viewModels.book import BookCollection
+from app.viewModels.book import BookCollection, BookViewModel
 
 import json
 __author__ = "IAmFiveHigh"
@@ -51,10 +51,13 @@ def search():
         # result['message'] = form.errors
         # return jsonify(result)
         flash('搜索关键词不符合要求，请重新输入关键词')
-    return render_template('search_result.html', books=books)
+    return render_template('search_result.html', books=books, form=form)
 
 
 @web.route('/book/<isbn>/detail')
 def book_detail(isbn):
-    pass
+    yushu_book = YuShu()
+    yushu_book.search_by_isbn(isbn)
+    book = BookViewModel(yushu_book.first)
+    return render_template('book_detail.html', book=book, wishes=[], gifts=[])
 

@@ -1,11 +1,19 @@
 from . import web
+from app.models.user import User
+from flask import render_template, request
+from app.forms.auth import RegisterForm
 
 __author__ = '七月'
 
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
-    pass
+    form = RegisterForm()
+    if request.method == 'POST' and form.validate():
+        user = User()
+        user.set_attrs(form.data)
+
+    return render_template('auth/register.html', form={'data':{}})
 
 
 @web.route('/login', methods=['GET', 'POST'])

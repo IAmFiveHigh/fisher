@@ -51,25 +51,9 @@ class YuShu:
                      image=json['image'])
         return model
 
-    @staticmethod
-    def create_book_models_by_mysql(json):
-        conn = mysql.connector.connect(user='root', password=mysqlPassword, database='fisher')
-        cursor = conn.cursor()
-        cursor.execute('insert into book (title, isbn, price, publisher, image, summary) values (%s, %s, %s, %s, %s, %s)',
-                       [json['title'], json['isbn'], json['price'], json['publisher'], json['image'], json['summary']])
-        conn.commit()
-        cursor.close()
-        conn.close()
+    @property
+    def first(self):
+        return self.books[0] if self.total > 0 else None
 
-    @staticmethod
-    def search_book_by_mysql(isbn):
-        conn = mysql.connector.connect(user='root', password=mysqlPassword, database='fisher')
-        cursor = conn.cursor()
-        cursor.execute('select * from book where isbn = %s', (isbn, ))
-        values = cursor.fetchall()
-        cursor.close()
-        conn.close()
-
-        return values
 
 
