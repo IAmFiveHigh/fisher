@@ -6,10 +6,11 @@ from sqlalchemy import Column, Integer, String, Boolean, Float
 from app.models.base import Base
 from werkzeug.security import generate_password_hash
 
+
 class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nickname = Column(String(24), nullable=False)
-    _password = Column('password', String(64))
+    _password = Column('password', String(128))
     phone_number = Column(String(18), unique=True)
     email = Column(String(50), unique=True, nullable=False)
     confirmed = Column(Boolean, default=False)
