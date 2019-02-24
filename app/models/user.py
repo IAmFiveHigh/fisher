@@ -5,9 +5,12 @@
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from app.models.base import Base
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from app import login_manager
 
 
-class User(Base):
+# 继承UserMixin 就可以用login——user处理cookie
+class User(UserMixin, Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nickname = Column(String(24), nullable=False)
     _password = Column('password', String(128))
@@ -31,3 +34,8 @@ class User(Base):
     def check_password(self, raw):
         # 第一个参数是加密后的 第二个是原始数据 相等返回True
         return check_password_hash(self._password, raw)
+
+
+@login_manager.request_loader
+def get_user(uid):
+    return User.query.get(int(uid))

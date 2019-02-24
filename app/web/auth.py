@@ -3,6 +3,7 @@ from app.models.user import User
 from app.models.base import db
 from flask import render_template, request, redirect, url_for, flash
 from app.forms.auth import RegisterForm, LoginForm
+from flask_login import login_user
 
 __author__ = '七月'
 
@@ -15,7 +16,7 @@ def register():
         user.set_attrs(form.data)
         db.session.add(user)
         db.session.commit()
-        redirect(url_for('web.login'))
+        return redirect(url_for('web.login'))
 
     return render_template('auth/register.html', form=form)
 
@@ -26,7 +27,13 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
-            pass
+            # login_user(user, remember=True) 存储cookie 关掉浏览器依然有 默认365天
+            login_user(user)
+            next = request.args.get('next')
+            # / 防止重定向攻击
+            if not next and next.startswith('/'):
+                next = url_for('web.index')
+            return redirect(next)
         else:
             flash('用户不存在或密码错误')
     return render_template('auth/login.html', form=form)
