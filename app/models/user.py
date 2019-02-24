@@ -4,7 +4,7 @@
 
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from app.models.base import Base
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(Base):
@@ -27,3 +27,7 @@ class User(Base):
     @password.setter
     def password(self, raw):
         self._password = generate_password_hash(raw)
+
+    def check_password(self, raw):
+        # 第一个参数是加密后的 第二个是原始数据 相等返回True
+        return check_password_hash(self._password, raw)

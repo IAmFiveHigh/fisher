@@ -1,8 +1,8 @@
 from . import web
 from app.models.user import User
 from app.models.base import db
-from flask import render_template, request
-from app.forms.auth import RegisterForm
+from flask import render_template, request, redirect, url_for, flash
+from app.forms.auth import RegisterForm, LoginForm
 
 __author__ = '七月'
 
@@ -15,13 +15,21 @@ def register():
         user.set_attrs(form.data)
         db.session.add(user)
         db.session.commit()
+        redirect(url_for('web.login'))
 
     return render_template('auth/register.html', form=form)
 
 
 @web.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.check_password(form.password.data):
+            pass
+        else:
+            flash('用户不存在或密码错误')
+    return render_template('auth/login.html', form=form)
 
 
 @web.route('/reset/password', methods=['GET', 'POST'])
