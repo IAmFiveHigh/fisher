@@ -12,10 +12,11 @@ __author__ = '七月'
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User()
-        user.set_attrs(form.data)
-        db.session.add(user)
-        db.session.commit()
+        with db.auto_commit():
+            user = User()
+            user.set_attrs(form.data)
+            db.session.add(user)
+        # db.session.commit()
         return redirect(url_for('web.login'))
 
     return render_template('auth/register.html', form=form)
@@ -31,7 +32,7 @@ def login():
             login_user(user)
             next = request.args.get('next')
             # / 防止重定向攻击
-            if not next or next.startswith('/'):
+            if not next or not next.startswith('/'):
                 next = url_for('web.index')
             return redirect(next)
         else:
