@@ -7,6 +7,10 @@ from app.models.base import Base
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login_manager
+from app.libs.help import is_isbn_or_key
+from app.spider.YuShu import YuShu
+from app.models.gift import Gift
+from app.models.wish import Wish
 
 
 # 继承UserMixin 就可以用login——user处理cookie
@@ -34,6 +38,23 @@ class User(UserMixin, Base):
     def check_password(self, raw):
         # 第一个参数是加密后的 第二个是原始数据 相等返回True
         return check_password_hash(self._password, raw)
+
+    def can_save_to_list(self, isbn):
+        if is_isbn_or_key(isbn) != 'isbn':
+            return False
+        yushu_book = YuShu()
+        yushu_book.search_by_isbn(isbn)
+        if not yushu_book.first:
+            return False
+
+        # 这书既不在用户的心愿单上也不在赠送单上 才可以添加到心愿单
+        gifting = Gift.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+        wishing = Wish.query.filter_by(uid=self.id, isbn=isbn, launched=False).first()
+
+        if not gifting and not wishing:
+            return True
+        else:
+            return False
 
 
 @login_manager.user_loader

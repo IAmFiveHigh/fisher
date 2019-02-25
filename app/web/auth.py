@@ -31,7 +31,7 @@ def login():
             login_user(user)
             next = request.args.get('next')
             # / 防止重定向攻击
-            if not next and next.startswith('/'):
+            if not next or next.startswith('/'):
                 next = url_for('web.index')
             return redirect(next)
         else:
