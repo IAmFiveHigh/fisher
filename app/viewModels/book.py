@@ -13,6 +13,8 @@ class BookViewModel:
         self.image = book['image']
         self.isbn = book['isbn']
         self.author = '、'.join(book['author'])
+        self.pubdate = book['pubdate']
+        self.binding = book['binding']
 
     @property
     def intro(self):

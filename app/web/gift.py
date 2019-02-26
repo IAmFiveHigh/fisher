@@ -1,7 +1,7 @@
 
 from . import web
 from app.models.base import db
-from flask import current_app, flash
+from flask import current_app, flash, url_for, redirect
 from flask_login import login_required, current_user
 from app.models.gift import Gift
 
@@ -33,6 +33,7 @@ def save_to_gifts(isbn):
         #     raise e
     else:
         flash('此书已存在您的心愿单或赠送单，请不要重复添加')
+    return redirect(url_for('web.book_detail', isbn=isbn))
 
 
 @web.route('/gifts/<gid>/redraw')
