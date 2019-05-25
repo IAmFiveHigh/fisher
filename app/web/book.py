@@ -14,12 +14,12 @@ from app.viewModels.trade import TradeInfo
 from app.viewModels.book import BookCollection, BookViewModel
 
 import json
+
 __author__ = "IAmFiveHigh"
 
 
 @web.route('/book/search')
 def search():
-
     """
         q :普通关键字 isbn
         page: 页码
@@ -34,7 +34,6 @@ def search():
     if form.validate():
         q = form.q.data.strip()
         page = form.page.data
-
 
         yushu = YuShu()
         isbn_or_key = is_isbn_or_key(q)
@@ -86,4 +85,3 @@ def book_detail(isbn):
                            gifts=trade_gifts_model,
                            has_in_gifts=has_in_gifts,
                            has_in_wishes=has_in_wishes)
-
