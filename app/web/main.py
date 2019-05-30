@@ -10,7 +10,7 @@ __author__ = '七月'
 def index():
     recent_gifts = Gift.recent()
     books = [BookViewModel(gift.book) for gift in recent_gifts]
-    return render_template('index.html', recents=books)
+    return render_template('index.html', recent=books)
 
 
 @web.route('/personal')
