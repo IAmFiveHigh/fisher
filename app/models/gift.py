@@ -9,6 +9,10 @@ from sqlalchemy.orm import relationship
 from flask import current_app
 from app.spider.YuShu import YuShu
 
+from collections import namedtuple
+
+EachGiftWishCount = namedtuple('EachGiftWishCount', ['count', 'isbn'])
+
 
 class Gift(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -43,7 +47,8 @@ class Gift(Base):
         ).group_by(
             Wish.isbn
         ).all()
-        return count_wishs
+        count_list = [EachGiftWishCount(count=w[0], isbn=w[1]) for w in count_wishs]
+        return count_list
 
     @property
     def book(self):
