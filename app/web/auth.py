@@ -2,7 +2,7 @@ from . import web
 from app.models.user import User
 from app.models.base import db
 from flask import render_template, request, redirect, url_for, flash
-from app.forms.auth import RegisterForm, LoginForm
+from app.forms.auth import RegisterForm, LoginForm, EmailForm
 from flask_login import login_user, logout_user
 
 __author__ = '七月'
@@ -42,7 +42,12 @@ def login():
 
 @web.route('/reset/password', methods=['GET', 'POST'])
 def forget_password_request():
-    pass
+    form = EmailForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            account_email = form.email.data
+            # user = User
+    return render_template('auth/forget_password_request.html', form=form)
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
@@ -58,4 +63,4 @@ def change_password():
 @web.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('web.index')) 
+    return redirect(url_for('web.index'))
